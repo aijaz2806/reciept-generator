@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        margin: 0;
+        background-color: #fff;
+      }
+  
+      @page {
+        size: A5 portrait;
+        margin: 10mm;
+      }
+
+      @media print {
+        @page {
+          size: A5 portrait;
+          margin: 0;
+        }
+
+        body {
+          margin: 0;
+          padding: 0;
+        }
+
+        .main-container {
+          width: 100%;
+          height: 100%;
+          max-width: 559px;
+          max-height: 794px;
+          display: flex;
+          flex-direction: column;
+          margin: 0 auto;
+          box-sizing: border-box;
+        }
+
+        .receipt-container {
+          height: 50%; /* Divide A5 portrait into two equal receipts */
+          box-sizing: border-box;
+          margin: 0;
+          border: 1px solid black;
+          page-break-inside: avoid;
+        }
+
+        .no-print {
+          display: none !important;
+        }
+      }
+
+      .main-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 559px;
+        max-height: 794px;
+        height: 794px; /* Full height of A5 portrait */
+        margin: 0 auto;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .receipt-container {
+        width: 90%;
+        height: 39%; /* Exactly half of A5 */
+        box-sizing: border-box;
+        background-color: #f5f5dc;
+        padding: 10px;
+        border: 1px solid #212121;
+        border-radius: 0;
+        margin: 20px 2px 0px 25px;
+        border-radius: 8px;
+      }
+  
+      .header {
+        text-align: center;
+        position: relative;
+      }
+  
+      .header img {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50px;
+        height: auto;
+      }
+  
+      .header .code {
+        font-size: 12px;
+        font-weight: bold;
+        color: #888;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+  
+      .header h1 {
+        font-size: 18px;
+        color: #2c3e50;
+        margin: 5px 0;
+      }
+  
+      .header h2 {
+        font-size: 14px;
+        color: #555;
+        margin: 5px 0;
+      }
+  
+      .receipt-body {
+        padding: 10px;
+        border-radius: 6px;
+      }
+  
+      .rowTwo {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin: 6px 0;
+        gap: 10rem;
+        margin-top: 1rem
+      }
+  
+      .row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin: 10px 0;
+        gap: 5rem;
+        border-bottom: 1px solid rgb(208, 194, 194);
+      }
+  
+      .label {
+        font-weight: bold;
+        color: #2c3e50;
+        white-space: nowrap;
+        margin-bottom: 4px;
+      }
+  
+      .value {
+        color: #333;
+        font-weight: 500;
+        text-align: right;
+        flex: 1;
+        margin-left: 8px;
+      }
+  
+      .rowTwo .value {
+        border: 2px dashed black;
+        padding: 4px 6px;
+        font-weight: bold;
+        text-align: center;
+        width: 60%;
+      }
+  
+      .amount {
+        font-weight: 600;
+        color: #333;
+        font-size: 13px;
+        margin-left: 10px;
+        white-space: nowrap;
+      }
+  
+      .footer {
+        text-align: center;
+        font-weight: bold;
+        margin-left: 1rem;
+        font-size: 13px;
+        color: #2c3e50;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="main-container">
+
+      <div class="receipt-container">
+        <div class="header">
+          <h1>NIYAAZ-E-IMAM HUSSAIN (A.S)</h1>
+          <h2>Udaipur (Raj.)</h2>
+          <img src="assets/logo.png" alt="Logo">
+        </div>
+  
+        <div class="receipt-body">
+          <div class="row">
+            <div style="display: flex; justify-content: space-between;  width: 100%; align-items: center;">
+              <div class="label">Receipt No.:</div>
+              <div class="value" id="receipt-number"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between;  width: 100%; align-items: center;">
+              <div class="label">Date :</div>
+              <div class="value" id="r-date"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="label">Name :</div>
+            <div class="value" id="r-name"></div>
+          </div>
+          <div class="row">
+            <div class="label">Amount in words:</div>
+            <div class="value" id="r-amountWords"></div>
+          </div>
+         
+          <div class="row">
+            <div class="label">Regarding :</div>
+            <div class="value" id="r-purpose"></div>
+          </div>
+          <div class="rowTwo">
+            <div class="value" id="r-amount" style="border: 3px dashed black; padding: 5px;"></div>
+            <div class="amount">Received with Thanks</div>
+          </div>
+  
+          <div class="footer">Signature</div>
+  
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+        function getQueryParam(param) {
+          const urlParams = new URLSearchParams(window.location.search);
+          return urlParams.get(param);
+        }
+
+        const data = {
+          receiptNo: getQueryParam('no'),
+          name: getQueryParam('name'),
+          amount: getQueryParam('amount'),
+          amountWords: getQueryParam('amountWords'),
+          purpose: getQueryParam('purpose'),
+          date: getQueryParam('date'),
+        };
+
+        // Fill Original Receipt
+        document.getElementById("receipt-number").innerText = data.receiptNo;
+        document.getElementById("r-name").innerText = data.name;
+        document.getElementById("r-amount").innerText = `₹`+ `         `+data.amount;
+        document.getElementById("r-amountWords").innerText = data.amountWords;
+        document.getElementById("r-purpose").innerText = data.purpose;
+        document.getElementById("r-date").innerText = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, '-');
+
+        window.onload = () => {
+          console.log("🧾 Receipt page DOM fully loaded");
+        };
+    </script>
+
+  </body>
+</html>
